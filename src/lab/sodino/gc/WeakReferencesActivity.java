@@ -22,17 +22,19 @@ import android.widget.TextView;
  * 50000:   217ms       35ms     <br/>
  * */
 public class WeakReferencesActivity extends Activity implements OnClickListener {
-	private Button btnNew;
-	private Button btnRelease;
+	private Button btnNew,btnRelease;
 	private TextView txtResult;
 	private long startGCTime = 0l;
 	private ArrayList<WFObject> listBusiness = new ArrayList<WFObject>();
 	private ArrayList<WeakReference<WFObject>> listGCLog = new ArrayList<WeakReference<WFObject>>();
-	
+	private int number;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_weak_references);
+		number = getIntent().getIntExtra("number", MainActivity.MAX);
+		TextView txtNumber = (TextView) findViewById(R.id.txtNumber);
+		txtNumber.setText("Finalize:Object's number=" + number);
 		btnNew = (Button)findViewById(R.id.btnNew);
 		btnNew.setOnClickListener(this);
 		btnNew.setEnabled(true);
@@ -41,12 +43,6 @@ public class WeakReferencesActivity extends Activity implements OnClickListener 
 		btnRelease.setEnabled(false);
 		
 		txtResult = (TextView)findViewById(R.id.txtResult);
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.main, menu);
-		return true;
 	}
 
 	
@@ -73,13 +69,13 @@ public class WeakReferencesActivity extends Activity implements OnClickListener 
 	}
 	
 	private void newObject(){
-		for (int i = 0;i < MainActivity.NUMBER;i ++) {
+		for (int i = 0;i < number;i ++) {
 			WFObject obj = new WFObject(i);
 			listBusiness.add(obj);
 			WeakReference<WFObject> wf  = new WeakReference<WFObject>(obj);
 			listGCLog.add(wf);
 		}
-		Log.d("ANDROID_LAB", "newObject " + MainActivity.NUMBER);
+		Log.d("ANDROID_LAB", "newObject " + number);
 		
 		btnNew.setEnabled(false);
 		btnRelease.setEnabled(true);
@@ -88,9 +84,9 @@ public class WeakReferencesActivity extends Activity implements OnClickListener 
 	
 	private void releaseObject() {
 		btnRelease.setEnabled(false);
-		listBusiness.clear();
 		new Thread() {
 			public void run() {
+				listBusiness.clear();
 				startGCTime = System.currentTimeMillis();
 				System.gc();
 				int size = 0;
@@ -114,7 +110,7 @@ public class WeakReferencesActivity extends Activity implements OnClickListener 
 			
 			@Override
 			public void run() {
-				txtResult.setText("GC "+ MainActivity.NUMBER+" objs,\nconsume:" + consume +" ms");
+				txtResult.setText("GC "+ number +" objs,\nconsume:" + consume +" ms");
 				btnNew.setEnabled(true);
 			}
 		});

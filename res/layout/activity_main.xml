@@ -13,13 +13,19 @@
         android:layout_height="wrap_content"
         android:text="@string/hello_world"
         android:id="@+id/txtDemo" />
-    
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Object Number: 10000"
+        android:id="@+id/btnNumber"
+        android:layout_below="@id/txtDemo"
+        />
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/btnFinalize"
         android:text="Choice:Finalize"
-        android:layout_below="@id/txtDemo"/>
+        android:layout_below="@id/btnNumber"/>
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

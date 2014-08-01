@@ -21,17 +21,20 @@ import android.widget.TextView;
  * 50000:   7553ms     2613ms    <br/>
  * */
 public class FinalizeActivity extends Activity implements OnClickListener {
-	private Button btnNew;
-	private Button btnRelease;
 	private TextView txtResult;
+	private Button btnNew,btnRelease;
 	private long startGCTime = 0l;
 	private ArrayList<FinalizeObject> listBusiness = new ArrayList<FinalizeObject>();
 	private ArrayList<String> listGCLog = new ArrayList<String>();
-	
+	private int number;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_finalize);
+		number = getIntent().getIntExtra("number", MainActivity.MAX);
+		TextView txtNumber = (TextView) findViewById(R.id.txtNumber);
+		txtNumber.setText("Finalize:Object's number=" + number);
+		
 		btnNew = (Button)findViewById(R.id.btnNew);
 		btnNew.setOnClickListener(this);
 		btnNew.setEnabled(true);
@@ -70,7 +73,7 @@ public class FinalizeActivity extends Activity implements OnClickListener {
 					
 					@Override
 					public void run() {
-						txtResult.setText("GC "+ MainActivity.NUMBER+" objs,\nconsume:" + consume +" ms");
+						txtResult.setText("GC "+ number +" objs,\nconsume:" + consume +" ms");
 						btnNew.setEnabled(true);						
 					}
 				});
@@ -92,12 +95,12 @@ public class FinalizeActivity extends Activity implements OnClickListener {
 	}
 	
 	private void newObject(){
-		for (int i = 0;i < MainActivity.NUMBER;i ++) {
+		for (int i = 0;i < number;i ++) {
 			FinalizeObject obj = new FinalizeObject(i);
 			listBusiness.add(obj);
 			listGCLog.add(obj.idStr);
 		}
-		Log.d("ANDROID_LAB", "newObject " + MainActivity.NUMBER);
+		Log.d("ANDROID_LAB", "newObject " + number);
 		
 		btnNew.setEnabled(false);
 		btnRelease.setEnabled(true);

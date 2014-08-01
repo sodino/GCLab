@@ -17,14 +17,14 @@
 	<TextView 
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
-	    android:id="@+id/txtFinalize"
+	    android:id="@+id/txtNumber"
 	    android:text="Finalize"
 	    android:layout_below="@id/txtDemo"/>
 	<LinearLayout android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
 	    android:orientation="horizontal"
 	    android:id="@+id/layoutFinalizer"
-	    android:layout_below="@id/txtFinalize">
+	    android:layout_below="@id/txtNumber">
 	    <Button
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
