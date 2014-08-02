@@ -69,25 +69,28 @@ public class WeakReferencesActivity extends Activity implements OnClickListener 
 	}
 	
 	private void newObject(){
+		txtResult.setText("");
+		long startNewTime = System.currentTimeMillis();
 		for (int i = 0;i < number;i ++) {
 			WFObject obj = new WFObject(i);
 			listBusiness.add(obj);
+		}
+		long consume = System.currentTimeMillis() - startNewTime;
+		showResult(true, consume);
+		for (int i = 0;i < number;i ++) {
+			WFObject obj = listBusiness.get(i);
 			WeakReference<WFObject> wf  = new WeakReference<WFObject>(obj);
 			listGCLog.add(wf);
 		}
 		Log.d("ANDROID_LAB", "newObject " + number);
-		
-		btnNew.setEnabled(false);
-		btnRelease.setEnabled(true);
-		txtResult.setText("");
 	}
 	
 	private void releaseObject() {
 		btnRelease.setEnabled(false);
 		new Thread() {
 			public void run() {
-				listBusiness.clear();
 				startGCTime = System.currentTimeMillis();
+				listBusiness.clear();
 				System.gc();
 				int size = 0;
 				while((size = listGCLog.size()) > 0) {
@@ -100,18 +103,26 @@ public class WeakReferencesActivity extends Activity implements OnClickListener 
 				}
 				long consume = System.currentTimeMillis() - startGCTime;
 				Log.d("ANDROID_LAB", "releaseObject() consume=" + consume);
-				showResult(consume);
+				showResult(false, consume);
 			}
 		}.start();
 	}
 	
-	private void showResult(final long consume) {
+	private void showResult(final boolean isNew, final long consume) {
 		runOnUiThread(new Runnable() {
 			
 			@Override
 			public void run() {
-				txtResult.setText("GC "+ number +" objs,\nconsume:" + consume +" ms");
-				btnNew.setEnabled(true);
+				if (isNew) {
+					txtResult.setText("New "+ number +" objs,\nconsume:" + consume +" ms");
+					btnNew.setEnabled(false);
+					btnRelease.setEnabled(true);
+				} else {
+					String newObjStr = txtResult.getText().toString();
+					txtResult.setText(newObjStr + "\n\nGC "+ number +" objs,\nconsume:" + consume +" ms");
+					btnNew.setEnabled(true);
+					btnRelease.setEnabled(false);
+				}
 			}
 		});
 	}

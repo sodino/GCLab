@@ -73,8 +73,10 @@ public class FinalizeActivity extends Activity implements OnClickListener {
 					
 					@Override
 					public void run() {
-						txtResult.setText("GC "+ number +" objs,\nconsume:" + consume +" ms");
-						btnNew.setEnabled(true);						
+						String newObjStr = txtResult.getText().toString();
+						txtResult.setText(newObjStr + "\n\nGC "+ number +" objs,\nconsume:" + consume +" ms");
+						btnNew.setEnabled(true);
+						btnRelease.setEnabled(false);
 					}
 				});
 			}
@@ -95,22 +97,33 @@ public class FinalizeActivity extends Activity implements OnClickListener {
 	}
 	
 	private void newObject(){
+		txtResult.setText("");
+		long startNewTime = System.currentTimeMillis();
 		for (int i = 0;i < number;i ++) {
 			FinalizeObject obj = new FinalizeObject(i);
 			listBusiness.add(obj);
+		}
+		final long consume = System.currentTimeMillis() - startNewTime;
+		runOnUiThread(new Runnable() {
+			
+			@Override
+			public void run() {
+				txtResult.setText("New "+ number +" objs,\nconsume:" + consume +" ms");
+				btnNew.setEnabled(false);
+				btnRelease.setEnabled(true);
+			}
+		});
+		for (int i = 0;i < number;i ++) {
+			FinalizeObject obj = listBusiness.get(i);
 			listGCLog.add(obj.idStr);
 		}
-		Log.d("ANDROID_LAB", "newObject " + number);
-		
-		btnNew.setEnabled(false);
-		btnRelease.setEnabled(true);
-		txtResult.setText("");
+		Log.d("ANDROID_LAB", "newObject " + number +" consume=" + consume);
 	}
 	
 	private void releaseObject() {
 		btnRelease.setEnabled(false);
-		listBusiness.clear();
 		startGCTime = System.currentTimeMillis();
+		listBusiness.clear();
 		System.gc();
 	}
 }
