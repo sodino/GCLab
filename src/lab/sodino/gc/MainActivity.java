@@ -21,6 +21,8 @@ public class MainActivity extends Activity implements OnClickListener {
 		btnFinalize.setOnClickListener(this);
 		Button btnWeakReferences = (Button)findViewById(R.id.btnWeakReferences);
 		btnWeakReferences.setOnClickListener(this);
+		Button btnSoftReferences = (Button)findViewById(R.id.btnSoftReferences);
+		btnSoftReferences.setOnClickListener(this);
 	}
 
 	@Override
@@ -43,6 +45,12 @@ public class MainActivity extends Activity implements OnClickListener {
 		case R.id.btnWeakReferences:
 			intent = new Intent();
 			intent.setClass(MainActivity.this, WeakReferencesActivity.class);
+			intent.putExtra("number", number);
+			startActivity(intent);
+			break;
+		case R.id.btnSoftReferences:
+			intent = new Intent();
+			intent.setClass(MainActivity.this, SoftReferencesActivity.class);
 			intent.putExtra("number", number);
 			startActivity(intent);
 			break;

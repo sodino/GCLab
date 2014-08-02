@@ -1,9 +1,11 @@
 package lab.sodino.gc;
 
-import java.lang.ref.WeakReference;
+import java.lang.ref.SoftReference;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,43 +14,43 @@ import android.widget.Button;
 import android.widget.TextView;
 
 /**
- * release:
- * obj num  consume    increase  <br/>
- * 10000:   95ms                 <br/>
- * 20000:   124ms       29ms     <br/>
- * 30000:   145ms       39ms     <br/>
- * 40000:   182ms       37ms     <br/>
- * 50000:   217ms       35ms     <br/>
+ * SoftReferences:只有在内存不足时，才会释放所引用的对象。<br/>
  * */
-public class WeakReferencesActivity extends Activity implements OnClickListener {
-	private Button btnNew,btnRelease;
+public class SoftReferencesActivity extends Activity implements OnClickListener {
+	private Button btnNew,btnRelease,btnHugeObject;
 	private TextView txtResult;
 	private long startGCTime = 0l;
-	private ArrayList<WFObject> listBusiness = new ArrayList<WFObject>();
-	private ArrayList<WeakReference<WFObject>> listGCLog = new ArrayList<WeakReference<WFObject>>();
+	private ArrayList<RefObject> listBusiness = new ArrayList<RefObject>();
+	private ArrayList<SoftReference<RefObject>> listGCLog = new ArrayList<SoftReference<RefObject>>();
 	private int number;
+	private ArrayList<Bitmap> listBitmap = new ArrayList<Bitmap>();
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_weak_references);
+		setContentView(R.layout.activity_soft_references);
 		number = getIntent().getIntExtra("number", MainActivity.MAX);
 		TextView txtNumber = (TextView) findViewById(R.id.txtNumber);
-		txtNumber.setText("WeakReferences:Object's number=" + number);
+		txtNumber.setText("SoftReferences:Object's number=" + number);
 		btnNew = (Button)findViewById(R.id.btnNew);
 		btnNew.setOnClickListener(this);
 		btnNew.setEnabled(true);
 		btnRelease = (Button)findViewById(R.id.btnRelease);
 		btnRelease.setOnClickListener(this);
 		btnRelease.setEnabled(false);
+		btnHugeObject = (Button)findViewById(R.id.btnHugeObject);
+		btnHugeObject.setOnClickListener(this);
+		btnHugeObject.setEnabled(false);
 		
 		txtResult = (TextView)findViewById(R.id.txtResult);
+//        ReferenceQueue queue = new ReferenceQueue();
+//        PhantomReference ref = new PhantomReference(new RefObject(), queue);
 	}
 
 	
-	class WFObject {
+	class RefObject {
 		int id = -1;
 		String idStr = null;
-		public WFObject(int id) {
+		public RefObject(int id) {
 			this.id = id;
 			this.idStr = Integer.toString(id);
 		}
@@ -64,21 +66,48 @@ public class WeakReferencesActivity extends Activity implements OnClickListener 
 		case R.id.btnRelease:
 			releaseObject();
 			break;
+		case R.id.btnHugeObject:
+			newHugeObject();
+			break;
 		}
 	}
 	
+	private void newHugeObject() {
+		btnHugeObject.setEnabled(false);
+		new Thread(){
+			public void run() {
+				Log.d("ANDROID_LAB", "newHugObject start");
+				int count = 0;
+				while(true) {
+					count ++;
+					try{
+						Bitmap bit = BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher);
+						listBitmap.add(bit);
+					}catch(OutOfMemoryError err){
+						err.printStackTrace();
+						System.gc();
+						if (listGCLog.size() == 0) {
+							break;
+						}
+					}
+				}
+				Log.d("ANDROID_LAB", "newHugObject oom, count=" + count);
+			}
+		}.start();
+	}
+
 	private void newObject(){
 		txtResult.setText("");
 		long startNewTime = System.currentTimeMillis();
 		for (int i = 0;i < number;i ++) {
-			WFObject obj = new WFObject(i);
+			RefObject obj = new RefObject(i);
 			listBusiness.add(obj);
 		}
 		long consume = System.currentTimeMillis() - startNewTime;
 		showResult(true, consume);
 		for (int i = 0;i < number;i ++) {
-			WFObject obj = listBusiness.get(i);
-			WeakReference<WFObject> wf  = new WeakReference<WFObject>(obj);
+			RefObject obj = listBusiness.get(i);
+			SoftReference<RefObject> wf  = new SoftReference<RefObject>(obj);
 			listGCLog.add(wf);
 		}
 		Log.d("ANDROID_LAB", "newObject " + number);
@@ -86,6 +115,7 @@ public class WeakReferencesActivity extends Activity implements OnClickListener 
 	
 	private void releaseObject() {
 		btnRelease.setEnabled(false);
+		btnHugeObject.setEnabled(true);
 		new Thread() {
 			public void run() {
 				startGCTime = System.currentTimeMillis();
@@ -94,7 +124,7 @@ public class WeakReferencesActivity extends Activity implements OnClickListener 
 				int size = 0;
 				while((size = listGCLog.size()) > 0) {
 					for (int i = size - 1; i >= 0; i--) {
-						WeakReference<WFObject> wfObj = listGCLog.get(i);
+						SoftReference<RefObject> wfObj = listGCLog.get(i);
 						if (wfObj.get() == null) { // 即WFObject已经被回收了
 							listGCLog.remove(i);
 						}
@@ -121,6 +151,8 @@ public class WeakReferencesActivity extends Activity implements OnClickListener 
 					txtResult.setText(newObjStr + "\n\nGC "+ number +" objs,\nconsume:" + consume +" ms");
 					btnNew.setEnabled(true);
 					btnRelease.setEnabled(false);
+					btnHugeObject.setEnabled(false);
+					listBitmap.clear();
 				}
 			}
 		});

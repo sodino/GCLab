@@ -24,6 +24,7 @@
         </activity>
         <activity android:name="lab.sodino.gc.FinalizeActivity"/>
         <activity android:name="lab.sodino.gc.WeakReferencesActivity"/>
+        <activity android:name="lab.sodino.gc.SoftReferencesActivity"/>
     </application>
 
 </manifest>
