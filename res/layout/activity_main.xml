@@ -38,5 +38,11 @@
         android:id="@+id/btnSoftReferences"
         android:text="Choice:SoftReferences"
         android:layout_below="@id/btnWeakReferences"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnObjectLifeCycle"
+        android:text="ObjectLifeCycle"
+        android:layout_below="@id/btnSoftReferences"/>
 
 </RelativeLayout>

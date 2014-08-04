@@ -44,13 +44,6 @@ public class FinalizeActivity extends Activity implements OnClickListener {
 		
 		txtResult = (TextView)findViewById(R.id.txtResult);
 	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.main, menu);
-		return true;
-	}
-
 	
 	class FinalizeObject {
 		int id = -1;

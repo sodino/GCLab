@@ -23,6 +23,8 @@ public class MainActivity extends Activity implements OnClickListener {
 		btnWeakReferences.setOnClickListener(this);
 		Button btnSoftReferences = (Button)findViewById(R.id.btnSoftReferences);
 		btnSoftReferences.setOnClickListener(this);
+		Button btnObjectLifeCycle = (Button)findViewById(R.id.btnObjectLifeCycle);
+		btnObjectLifeCycle.setOnClickListener(this);
 	}
 
 	@Override
@@ -52,6 +54,11 @@ public class MainActivity extends Activity implements OnClickListener {
 			intent = new Intent();
 			intent.setClass(MainActivity.this, SoftReferencesActivity.class);
 			intent.putExtra("number", number);
+			startActivity(intent);
+			break;
+		case R.id.btnObjectLifeCycle:
+			intent = new Intent();
+			intent.setClass(MainActivity.this, ObjectLifeCycleActivity.class);
 			startActivity(intent);
 			break;
 		}
