@@ -13,6 +13,11 @@ import android.widget.Button;
 import android.widget.TextView;
 
 /**
+ * 数据证明这是一个坏例子：时间太长了。
+ * 另其它风险：
+ * 1. finalize()方法有可能让对象再次复活
+ * 2. 实现了finalize()的对象至少要执行两次gc才有可能被回收。
+ * 
  * finalize:
  * obj num  consume    increase  <br/>
  * 10000:   433ms                <br/>
