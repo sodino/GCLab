@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 /**
  * SoftReferences:只有在内存不足时，才会释放所引用的对象。<br/>
+ * newHugeObject()用于不断申请图片，制作OOM的机会。<br/>
  * */
 public class SoftReferencesActivity extends Activity implements OnClickListener {
 	private Button btnNew,btnRelease,btnHugeObject;
