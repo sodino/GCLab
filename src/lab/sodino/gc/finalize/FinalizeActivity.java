@@ -1,11 +1,12 @@
-package lab.sodino.gc;
+package lab.sodino.gc.finalize;
 
 import java.util.ArrayList;
 
-import android.os.Bundle;
+import lab.sodino.gc.MainActivity;
+import lab.sodino.gc.R;
 import android.app.Activity;
+import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;

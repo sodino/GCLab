@@ -47,6 +47,7 @@ public class ObjectLifeCycleActivity extends Activity implements View.OnClickLis
 				System.gc();
 				Reference<? extends CycleObject> ref;
 				while (true) {
+					// phantomReference的被回收时机是未知的，只好一直循环啦..
 					ref = refQueue.poll();
 					if (ref == null){
 						// 至此， 仍可用mat查询到CycleObject

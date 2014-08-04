@@ -21,10 +21,11 @@ public final class R {
     }
     public static final class id {
         public static final int btnFinalize=0x7f070009;
-        public static final int btnHugeObject=0x7f07000d;
+        public static final int btnHugeObject=0x7f07000e;
         public static final int btnNew=0x7f070005;
         public static final int btnNumber=0x7f070008;
-        public static final int btnObjectLifeCycle=0x7f07000c;
+        public static final int btnObjectLifeCycle=0x7f07000d;
+        public static final int btnPhantomReferences=0x7f07000c;
         public static final int btnRelease=0x7f070006;
         public static final int btnSoftReferences=0x7f07000b;
         public static final int btnTrigger=0x7f070002;
@@ -39,8 +40,9 @@ public final class R {
         public static final int activity_cycle=0x7f030000;
         public static final int activity_finalize=0x7f030001;
         public static final int activity_main=0x7f030002;
-        public static final int activity_soft_references=0x7f030003;
-        public static final int activity_weak_references=0x7f030004;
+        public static final int activity_phantom_references=0x7f030003;
+        public static final int activity_soft_references=0x7f030004;
+        public static final int activity_weak_references=0x7f030005;
     }
     public static final class string {
         public static final int action_settings=0x7f050001;

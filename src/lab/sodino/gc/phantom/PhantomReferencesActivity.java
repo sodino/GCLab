@@ -1,8 +1,12 @@
-package lab.sodino.gc;
+package lab.sodino.gc.phantom;
 
-import java.lang.ref.WeakReference;
+import java.lang.ref.PhantomReference;
+import java.lang.ref.Reference;
+import java.lang.ref.ReferenceQueue;
 import java.util.ArrayList;
 
+import lab.sodino.gc.MainActivity;
+import lab.sodino.gc.R;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,26 +18,27 @@ import android.widget.TextView;
 /**
  * release:
  * obj num  consume    increase  <br/>
- * 10000:   95ms                 <br/>
- * 20000:   124ms       29ms     <br/>
- * 30000:   145ms       39ms     <br/>
- * 40000:   182ms       37ms     <br/>
- * 50000:   217ms       35ms     <br/>
+ * 10000:    <br/>
+ * 20000:    <br/>
+ * 30000:    <br/>
+ * 40000:    <br/>
+ * 50000:    <br/>
  * */
-public class WeakReferencesActivity extends Activity implements OnClickListener {
+public class PhantomReferencesActivity extends Activity implements OnClickListener {
 	private Button btnNew,btnRelease;
 	private TextView txtResult;
 	private long startGCTime = 0l;
-	private ArrayList<WFObject> listBusiness = new ArrayList<WFObject>();
-	private ArrayList<WeakReference<WFObject>> listGCLog = new ArrayList<WeakReference<WFObject>>();
+	private ArrayList<PFObject> listBusiness = new ArrayList<PFObject>();
+	private ArrayList<PhantomReference<PFObject>> listGCLog = new ArrayList<PhantomReference<PFObject>>();
+	private ReferenceQueue<PFObject> refQueue = new ReferenceQueue<PFObject>();
 	private int number;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_weak_references);
+		setContentView(R.layout.activity_phantom_references);
 		number = getIntent().getIntExtra("number", MainActivity.MAX);
 		TextView txtNumber = (TextView) findViewById(R.id.txtNumber);
-		txtNumber.setText("WeakReferences:Object's number=" + number);
+		txtNumber.setText("PhantomReferences:Object's number=" + number);
 		btnNew = (Button)findViewById(R.id.btnNew);
 		btnNew.setOnClickListener(this);
 		btnNew.setEnabled(true);
@@ -45,10 +50,10 @@ public class WeakReferencesActivity extends Activity implements OnClickListener 
 	}
 
 	
-	class WFObject {
+	class PFObject {
 		int id = -1;
 		String idStr = null;
-		public WFObject(int id) {
+		public PFObject(int id) {
 			this.id = id;
 			this.idStr = Integer.toString(id);
 		}
@@ -71,15 +76,15 @@ public class WeakReferencesActivity extends Activity implements OnClickListener 
 		txtResult.setText("");
 		long startNewTime = System.currentTimeMillis();
 		for (int i = 0;i < number;i ++) {
-			WFObject obj = new WFObject(i);
+			PFObject obj = new PFObject(i);
 			listBusiness.add(obj);
 		}
 		long consume = System.currentTimeMillis() - startNewTime;
 		showResult(true, consume);
 		for (int i = 0;i < number;i ++) {
-			WFObject obj = listBusiness.get(i);
-			WeakReference<WFObject> wf  = new WeakReference<WFObject>(obj);
-			listGCLog.add(wf);
+			PFObject obj = listBusiness.get(i);
+			PhantomReference<PFObject> phantomRef  = new PhantomReference<PFObject>(obj, refQueue);
+			listGCLog.add(phantomRef);
 		}
 		Log.d("ANDROID_LAB", "newObject " + number);
 	}
@@ -91,12 +96,21 @@ public class WeakReferencesActivity extends Activity implements OnClickListener 
 				startGCTime = System.currentTimeMillis();
 				listBusiness.clear();
 				System.gc();
-				int size = 0;
-				while((size = listGCLog.size()) > 0) {
-					for (int i = size - 1; i >= 0; i--) {
-						WeakReference<WFObject> wfObj = listGCLog.get(i);
-						if (wfObj.get() == null) { // 即WFObject已经被回收了
-							listGCLog.remove(i);
+				int count = 0;
+				while(count != number) {
+					Reference<? extends PFObject> ref = (Reference<? extends PFObject>) refQueue.poll();
+					if (ref != null) {
+						boolean bool = listGCLog.remove(ref);
+						count ++;
+//						Log.d("ANDROID_LAB", "vm collected count=" + count +" remove_bool=" + bool);
+					} else {
+						Log.d("ANDROID_LAB", "only null, call gc! count=" + count);
+						// 催促jvm尽早执行回收操作
+						System.gc();
+						try {
+							Thread.sleep(1000l);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
 						}
 					}
 				}

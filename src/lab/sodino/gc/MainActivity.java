@@ -1,5 +1,9 @@
 package lab.sodino.gc;
 
+import lab.sodino.gc.finalize.FinalizeActivity;
+import lab.sodino.gc.phantom.PhantomReferencesActivity;
+import lab.sodino.gc.soft.SoftReferencesActivity;
+import lab.sodino.gc.weak.WeakReferencesActivity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -23,6 +27,8 @@ public class MainActivity extends Activity implements OnClickListener {
 		btnWeakReferences.setOnClickListener(this);
 		Button btnSoftReferences = (Button)findViewById(R.id.btnSoftReferences);
 		btnSoftReferences.setOnClickListener(this);
+		Button btnPhantomReferences = (Button)findViewById(R.id.btnPhantomReferences);
+		btnPhantomReferences.setOnClickListener(this);
 		Button btnObjectLifeCycle = (Button)findViewById(R.id.btnObjectLifeCycle);
 		btnObjectLifeCycle.setOnClickListener(this);
 	}
@@ -53,6 +59,12 @@ public class MainActivity extends Activity implements OnClickListener {
 		case R.id.btnSoftReferences:
 			intent = new Intent();
 			intent.setClass(MainActivity.this, SoftReferencesActivity.class);
+			intent.putExtra("number", number);
+			startActivity(intent);
+			break;
+		case R.id.btnPhantomReferences:
+			intent = new Intent();
+			intent.setClass(MainActivity.this, PhantomReferencesActivity.class);
 			intent.putExtra("number", number);
 			startActivity(intent);
 			break;

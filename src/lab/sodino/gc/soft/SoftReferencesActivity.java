@@ -1,8 +1,10 @@
-package lab.sodino.gc;
+package lab.sodino.gc.soft;
 
 import java.lang.ref.SoftReference;
 import java.util.ArrayList;
 
+import lab.sodino.gc.MainActivity;
+import lab.sodino.gc.R;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

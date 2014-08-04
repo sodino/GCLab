@@ -41,6 +41,12 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:id="@+id/btnPhantomReferences"
+        android:text="Choice:PhantomReferences"
+        android:layout_below="@id/btnWeakReferences"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:id="@+id/btnObjectLifeCycle"
         android:text="ObjectLifeCycle"
         android:layout_below="@id/btnSoftReferences"/>
