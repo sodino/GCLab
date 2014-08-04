@@ -106,12 +106,12 @@ public class PhantomReferencesActivity extends Activity implements OnClickListen
 					} else {
 						Log.d("ANDROID_LAB", "only null, call gc! count=" + count);
 						// 催促jvm尽早执行回收操作
-						System.gc();
-						try {
-							Thread.sleep(1000l);
-						} catch (InterruptedException e) {
-							e.printStackTrace();
-						}
+//						System.gc();
+//						try {
+//							Thread.sleep(1000l);
+//						} catch (InterruptedException e) {
+//							e.printStackTrace();
+//						}
 					}
 				}
 				long consume = System.currentTimeMillis() - startGCTime;
