@@ -10,7 +10,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-
+/**
+ * 
+ * 本文中的代码可以加QQ群Code2Share(363267446)，从群共享文件中去下载获得。
+ * 也可以在http://blog.csdn.net/sodino中阅读详细文章。
+ * */
 public class MainActivity extends Activity implements OnClickListener {
 	public static final int MAX = 50000;
 	public static final int MARKUP = 10000;

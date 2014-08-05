@@ -19,6 +19,10 @@ import android.widget.TextView;
  * 30000:   145ms       39ms     <br/>
  * 40000:   182ms       37ms     <br/>
  * 50000:   217ms       35ms     <br/>
+ * 
+ * 
+ * 本文中的代码可以加QQ群Code2Share(363267446)，从群共享文件中去下载获得。
+ * 也可以在http://blog.csdn.net/sodino中阅读详细文章。
  * */
 public class WeakReferencesActivity extends Activity implements OnClickListener {
 	private Button btnNew,btnRelease;
@@ -69,15 +73,16 @@ public class WeakReferencesActivity extends Activity implements OnClickListener 
 	
 	private void newObject(){
 		txtResult.setText("");
+		WFObject obj = null;
 		long startNewTime = System.currentTimeMillis();
 		for (int i = 0;i < number;i ++) {
-			WFObject obj = new WFObject(i);
+			obj = new WFObject(i);
 			listBusiness.add(obj);
 		}
 		long consume = System.currentTimeMillis() - startNewTime;
 		showResult(true, consume);
 		for (int i = 0;i < number;i ++) {
-			WFObject obj = listBusiness.get(i);
+			obj = listBusiness.get(i);
 			WeakReference<WFObject> wf  = new WeakReference<WFObject>(obj);
 			listGCLog.add(wf);
 		}

@@ -18,6 +18,10 @@ import android.widget.TextView;
 /**
  * SoftReferences:只有在内存不足时，才会释放所引用的对象。<br/>
  * newHugeObject()用于不断申请图片，制作OOM的机会。<br/>
+ * 
+ * 
+ * 本文中的代码可以加QQ群Code2Share(363267446)，从群共享文件中去下载获得。
+ * 也可以在http://blog.csdn.net/sodino中阅读详细文章。
  * */
 public class SoftReferencesActivity extends Activity implements OnClickListener {
 	private Button btnNew,btnRelease,btnHugeObject;
@@ -101,15 +105,16 @@ public class SoftReferencesActivity extends Activity implements OnClickListener 
 
 	private void newObject(){
 		txtResult.setText("");
+		RefObject obj = null;
 		long startNewTime = System.currentTimeMillis();
 		for (int i = 0;i < number;i ++) {
-			RefObject obj = new RefObject(i);
+			obj = new RefObject(i);
 			listBusiness.add(obj);
 		}
 		long consume = System.currentTimeMillis() - startNewTime;
 		showResult(true, consume);
 		for (int i = 0;i < number;i ++) {
-			RefObject obj = listBusiness.get(i);
+			obj = listBusiness.get(i);
 			SoftReference<RefObject> wf  = new SoftReference<RefObject>(obj);
 			listGCLog.add(wf);
 		}

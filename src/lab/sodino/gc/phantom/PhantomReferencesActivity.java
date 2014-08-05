@@ -23,6 +23,10 @@ import android.widget.TextView;
  * 30000:    <br/>
  * 40000:    <br/>
  * 50000:    <br/>
+ * 
+ * 
+ * 本文中的代码可以加QQ群Code2Share(363267446)，从群共享文件中去下载获得。
+ * 也可以在http://blog.csdn.net/sodino中阅读详细文章。
  * */
 public class PhantomReferencesActivity extends Activity implements OnClickListener {
 	private Button btnNew,btnRelease;
@@ -74,15 +78,16 @@ public class PhantomReferencesActivity extends Activity implements OnClickListen
 	
 	private void newObject(){
 		txtResult.setText("");
+		PFObject obj = null;
 		long startNewTime = System.currentTimeMillis();
 		for (int i = 0;i < number;i ++) {
-			PFObject obj = new PFObject(i);
+			obj = new PFObject(i);
 			listBusiness.add(obj);
 		}
 		long consume = System.currentTimeMillis() - startNewTime;
 		showResult(true, consume);
 		for (int i = 0;i < number;i ++) {
-			PFObject obj = listBusiness.get(i);
+			obj = listBusiness.get(i);
 			PhantomReference<PFObject> phantomRef  = new PhantomReference<PFObject>(obj, refQueue);
 			listGCLog.add(phantomRef);
 		}

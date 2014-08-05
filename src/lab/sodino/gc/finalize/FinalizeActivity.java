@@ -23,6 +23,9 @@ import android.widget.TextView;
  * 30000:   2775ms     1531ms    <br/>
  * 40000:   4940ms     2165ms    <br/>
  * 50000:   7553ms     2613ms    <br/>
+ * 
+ * 本文中的代码可以加QQ群Code2Share(363267446)，从群共享文件中去下载获得。
+ * 也可以在http://blog.csdn.net/sodino中阅读详细文章。
  * */
 public class FinalizeActivity extends Activity implements OnClickListener {
 	private TextView txtResult;
@@ -51,6 +54,7 @@ public class FinalizeActivity extends Activity implements OnClickListener {
 	
 	class FinalizeObject {
 		int id = -1;
+		// 特征日志
 		String idStr = null;
 		public FinalizeObject(int id) {
 			this.id = id;
@@ -61,9 +65,11 @@ public class FinalizeActivity extends Activity implements OnClickListener {
 		public void finalize() {
 			boolean contains = listGCLog.contains(FinalizeObject.this.idStr); 
 			if (contains) {
+				// 删除特征日志：isStr
 				listGCLog.remove(idStr);
 			}
 			if (listGCLog.size() == 0) {
+				// 已经全部回收完毕了
 				final long consume = (System.currentTimeMillis() - startGCTime);
 				Log.d("ANDROID_LAB", "finalize size=0, consumeTime=" + consume +" name=" + Thread.currentThread().getName());
 				runOnUiThread(new Runnable() {
@@ -95,9 +101,10 @@ public class FinalizeActivity extends Activity implements OnClickListener {
 	
 	private void newObject(){
 		txtResult.setText("");
+		FinalizeObject obj = null;
 		long startNewTime = System.currentTimeMillis();
 		for (int i = 0;i < number;i ++) {
-			FinalizeObject obj = new FinalizeObject(i);
+			obj = new FinalizeObject(i);
 			listBusiness.add(obj);
 		}
 		final long consume = System.currentTimeMillis() - startNewTime;
@@ -111,7 +118,7 @@ public class FinalizeActivity extends Activity implements OnClickListener {
 			}
 		});
 		for (int i = 0;i < number;i ++) {
-			FinalizeObject obj = listBusiness.get(i);
+			obj = listBusiness.get(i);
 			listGCLog.add(obj.idStr);
 		}
 		Log.d("ANDROID_LAB", "newObject " + number +" consume=" + consume);

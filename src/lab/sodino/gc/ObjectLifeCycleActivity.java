@@ -15,6 +15,9 @@ import android.widget.Button;
  * 先finalize->再phantom
  * 得证证据为：
  * 先输出finalize()方法中"finalize() idStr=[idStr]" 打印日志,才会有"refQueue.poll() is not null"的内容打印出来。
+ * 
+ * 本文中的代码可以加QQ群Code2Share(363267446)，从群共享文件中去下载获得。
+ * 也可以在http://blog.csdn.net/sodino中阅读详细文章。
  * */
 public class ObjectLifeCycleActivity extends Activity implements View.OnClickListener {
 	Button btnTrigger;
