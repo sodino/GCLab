@@ -1,5 +1,4 @@
 package lab.sodino.gc.weak;
-
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
@@ -12,9 +11,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
-
 /**
- * release:
+ * WeakReferences:
  * obj num  consume    increase  <br/>
  * 10000:   95ms                 <br/>
  * 20000:   124ms       29ms     <br/>

@@ -1,5 +1,4 @@
 package lab.sodino.gc.finalize;
-
 import java.util.ArrayList;
 
 import lab.sodino.gc.MainActivity;
@@ -11,7 +10,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
-
 /**
  * 数据证明这是一个坏例子：时间太长了。
  * 另其它风险：

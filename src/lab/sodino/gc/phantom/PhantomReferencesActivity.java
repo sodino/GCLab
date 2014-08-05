@@ -101,6 +101,8 @@ public class PhantomReferencesActivity extends Activity implements OnClickListen
 					Reference<? extends PFObject> ref = (Reference<? extends PFObject>) refQueue.poll();
 					if (ref != null) {
 						boolean bool = listGCLog.remove(ref);
+						// 清除一下虚引用。
+						ref.clear();
 						count ++;
 //						Log.d("ANDROID_LAB", "vm collected count=" + count +" remove_bool=" + bool);
 					} else {
