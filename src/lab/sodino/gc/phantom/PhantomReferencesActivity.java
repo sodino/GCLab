@@ -88,6 +88,7 @@ public class PhantomReferencesActivity extends Activity implements OnClickListen
 		showResult(true, consume);
 		for (int i = 0;i < number;i ++) {
 			obj = listBusiness.get(i);
+			// 将对象传入构造虚引用，并与引用队列关联
 			PhantomReference<PFObject> phantomRef  = new PhantomReference<PFObject>(obj, refQueue);
 			listGCLog.add(phantomRef);
 		}
@@ -111,7 +112,7 @@ public class PhantomReferencesActivity extends Activity implements OnClickListen
 						count ++;
 //						Log.d("ANDROID_LAB", "vm collected count=" + count +" remove_bool=" + bool);
 					} else {
-						Log.d("ANDROID_LAB", "only null, call gc! count=" + count);
+//						Log.d("ANDROID_LAB", "only null, call gc! count=" + count);
 						// 催促jvm尽早执行回收操作
 //						System.gc();
 //						try {

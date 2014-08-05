@@ -128,6 +128,7 @@ public class FinalizeActivity extends Activity implements OnClickListener {
 		btnRelease.setEnabled(false);
 		startGCTime = System.currentTimeMillis();
 		listBusiness.clear();
+		//清除操作并告诉VM有一大坨对象可以吃啦..
 		System.gc();
 	}
 }

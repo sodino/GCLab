@@ -95,9 +95,10 @@ public class WeakReferencesActivity extends Activity implements OnClickListener 
 			public void run() {
 				startGCTime = System.currentTimeMillis();
 				listBusiness.clear();
+				//清除操作并告诉VM有一大坨对象可以吃啦..
 				System.gc();
 				int size = 0;
-				while((size = listGCLog.size()) > 0) {
+				while((size = listGCLog.size()) > 0) {// size为0表示全部被回收了
 					for (int i = size - 1; i >= 0; i--) {
 						WeakReference<WFObject> wfObj = listGCLog.get(i);
 						if (wfObj.get() == null) { // 即WFObject已经被回收了
