@@ -1,12 +1,19 @@
 package lab.sodino.gc;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import lab.sodino.gc.finalize.FinalizeActivity;
 import lab.sodino.gc.phantom.PhantomReferencesActivity;
 import lab.sodino.gc.soft.SoftReferencesActivity;
 import lab.sodino.gc.weak.WeakReferencesActivity;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -35,6 +42,8 @@ public class MainActivity extends Activity implements OnClickListener {
 		btnPhantomReferences.setOnClickListener(this);
 		Button btnObjectLifeCycle = (Button)findViewById(R.id.btnObjectLifeCycle);
 		btnObjectLifeCycle.setOnClickListener(this);
+		Button btnDumpFile = (Button)findViewById(R.id.btnDumpFile);
+		btnDumpFile.setOnClickListener(this);
 	}
 
 	@Override
@@ -77,6 +86,41 @@ public class MainActivity extends Activity implements OnClickListener {
 			intent.setClass(MainActivity.this, ObjectLifeCycleActivity.class);
 			startActivity(intent);
 			break;
+		case R.id.btnDumpFile:
+			createDumpFile(this);
+			break;
 		}
+	}
+	
+	public static boolean createDumpFile(Context context) {
+		String LOG_PATH = "/dump.gc/";
+		boolean bool = false;
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd_HH.mm.ssss");
+		String createTime = sdf.format(new Date(System.currentTimeMillis()));
+		String state = android.os.Environment.getExternalStorageState();
+		// 判断SdCard是否存在并且是可用的
+		if (android.os.Environment.MEDIA_MOUNTED.equals(state)) {
+			File file = new File(Environment.getExternalStorageDirectory().getPath() + LOG_PATH);
+			if (!file.exists()) {
+				file.mkdirs();
+			}
+			String hprofPath = file.getAbsolutePath();
+			if (!hprofPath.endsWith("/")) {
+				hprofPath += "/";
+			}				 
+			
+			hprofPath += createTime + ".hprof";
+			try {
+				android.os.Debug.dumpHprofData(hprofPath);
+				bool = true;
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		} else {
+			bool = false;
+		}
+		
+		return bool;
+		return bool;
 	}
 }

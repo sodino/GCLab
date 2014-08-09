@@ -20,8 +20,9 @@ public final class R {
         public static final int ic_launcher=0x7f020000;
     }
     public static final class id {
+        public static final int btnDumpFile=0x7f07000e;
         public static final int btnFinalize=0x7f070009;
-        public static final int btnHugeObject=0x7f07000e;
+        public static final int btnHugeObject=0x7f07000f;
         public static final int btnNew=0x7f070005;
         public static final int btnNumber=0x7f070008;
         public static final int btnObjectLifeCycle=0x7f07000d;
