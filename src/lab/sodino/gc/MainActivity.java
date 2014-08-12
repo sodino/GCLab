@@ -14,6 +14,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -92,6 +93,14 @@ public class MainActivity extends Activity implements OnClickListener {
 		}
 	}
 	
+	/**
+	 * 一个heap dump就是一个程序heap的快照，可以获知程序的哪些部分正在使用大部分的内存。<br/>
+	 * 它保存为一种叫做HPROF的二进制格式。<br/>
+	 * 对于Android执行android.os.Debug.dumpHprofData(hprofPath)方法后所生成的文件，需要把.hprof文件从Dalvik格式转换成J2SE HPROF格式。<br/>
+	 * 使用Android SDK提供的hprof-conv工具可执行该转换操作。<br/><br/>
+	 * <i>hprof-conv dump.hprof converted-dump.hprof</i>  <br/><br/>
+	 * 以下是生成dump文件代码。<br/>
+	 * */
 	public static boolean createDumpFile(Context context) {
 		String LOG_PATH = "/dump.gc/";
 		boolean bool = false;
@@ -113,11 +122,13 @@ public class MainActivity extends Activity implements OnClickListener {
 			try {
 				android.os.Debug.dumpHprofData(hprofPath);
 				bool = true;
+				Log.d("ANDROID_LAB", "create dump file done!");
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		} else {
 			bool = false;
+			Log.d("ANDROID_LAB", "no sdcard!");
 		}
 		
 		return bool;
